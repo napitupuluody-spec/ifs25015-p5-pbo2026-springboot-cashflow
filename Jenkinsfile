@@ -34,7 +34,26 @@ pipeline {
 
         stage('Trivy Scan') {
             steps {
-                sh 'trivy fs --exit-code 1 --severity HIGH,CRITICAL --skip-dirs target,node_modules .'
+                // Agent Jenkins tidak punya trivy terpasang -> pakai yang ada di PATH,
+                // jika tidak ada, unduh binary ke workspace (tanpa perlu root).
+                sh '''
+                    set -e
+                    TRIVY_BIN_DIR="$WORKSPACE/.trivy-bin"
+                    if command -v trivy >/dev/null 2>&1; then
+                        TRIVY=trivy
+                    else
+                        if [ ! -x "$TRIVY_BIN_DIR/trivy" ]; then
+                            mkdir -p "$TRIVY_BIN_DIR"
+                            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh \\
+                                | sh -s -- -b "$TRIVY_BIN_DIR"
+                        fi
+                        TRIVY="$TRIVY_BIN_DIR/trivy"
+                    fi
+                    "$TRIVY" --version
+                    "$TRIVY" fs --cache-dir "$WORKSPACE/.trivy-cache" \\
+                        --scanners vuln --exit-code 1 --severity HIGH,CRITICAL \\
+                        --skip-dirs target,node_modules,.m2,.trivy-bin,.trivy-cache,.git .
+                '''
             }
         }
 
