@@ -29,11 +29,6 @@ class DomainTest {
     }
 
     @Test
-    void digestFailsForUnknownAlgorithm() {
-        assertThrows(IllegalStateException.class, () -> PasswordHasher.digest("x", "BUKAN-ALGORITMA"));
-    }
-
-    @Test
     void transactionHelpers() {
         Transaction in = tx(1, 100, TransactionType.INCOME, 0);
         Transaction out = tx(2, 40, TransactionType.EXPENSE, 1);

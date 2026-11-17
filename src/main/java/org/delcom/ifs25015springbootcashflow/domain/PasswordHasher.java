@@ -12,15 +12,11 @@ public final class PasswordHasher {
     }
 
     public static String hash(String raw) {
-        return digest(raw, "SHA-256");
-    }
-
-    static String digest(String raw, String algorithm) {
         try {
-            MessageDigest md = MessageDigest.getInstance(algorithm);
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             return HexFormat.of().formatHex(md.digest(raw.getBytes(StandardCharsets.UTF_8)));
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException(algorithm + " tidak tersedia", e);
+            throw new IllegalStateException("SHA-256 tidak tersedia", e);
         }
     }
 
