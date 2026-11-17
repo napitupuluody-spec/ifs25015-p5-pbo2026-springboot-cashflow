@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage('Build & Test') {
             steps {
-                sh './mvnw -B clean test'
+                sh './mvnw -Dmaven.repo.local=.m2/repository -B clean test'
             }
             post {
                 always { junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml' }
@@ -25,7 +25,7 @@ pipeline {
         stage('Jacoco 100%') {
             steps {
                 // gagal bila coverage counter terukur < 100% (view & auth dikecualikan di pom.xml)
-                sh './mvnw -B verify'
+                sh './mvnw -Dmaven.repo.local=.m2/repository -B verify'
             }
             post {
                 always { archiveArtifacts artifacts: 'target/site/jacoco/**', allowEmptyArchive: true }
@@ -40,7 +40,7 @@ pipeline {
 
         stage('Package') {
             steps {
-                sh './mvnw -B clean package -Pproduction -DskipTests'
+                sh './mvnw -Dmaven.repo.local=.m2/repository -B clean package -Pproduction -DskipTests'
             }
         }
 
