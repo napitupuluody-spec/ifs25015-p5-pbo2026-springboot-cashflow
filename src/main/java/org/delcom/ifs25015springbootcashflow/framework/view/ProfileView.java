@@ -14,6 +14,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 import org.delcom.ifs25015springbootcashflow.adapter.storage.FileStorage;
 import org.delcom.ifs25015springbootcashflow.domain.entity.User;
 import org.delcom.ifs25015springbootcashflow.domain.exception.DomainException;
@@ -23,6 +24,7 @@ import org.delcom.ifs25015springbootcashflow.usecase.UserUseCase;
 
 /** Pengaturan akun: nama, password, foto profil. */
 @Route(value = "profile", layout = MainLayout.class)
+@RouteAlias(value = "settings", layout = MainLayout.class)
 @PageTitle("Profil | Cashflow")
 public class ProfileView extends VerticalLayout implements BeforeEnterObserver {
 

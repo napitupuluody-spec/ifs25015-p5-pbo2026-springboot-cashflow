@@ -19,6 +19,8 @@ spring:
 
 server:
   port: ${APP_PORT:${PORT:8080}}
+  # Aplikasi berjalan di belakang reverse proxy (Nginx Delcom): percayai header X-Forwarded-*
+  forward-headers-strategy: framework
   # Kompres respons teks (HTML/JS/CSS/JSON) agar halaman dimuat lebih cepat
   compression:
     enabled: true
