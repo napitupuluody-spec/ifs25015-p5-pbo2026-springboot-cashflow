@@ -83,16 +83,10 @@ pipeline {
         }
 
         stage('Deploy') {
-            when { branch 'main' }
             steps {
-                // DB_*, ROOT_*, UPLOAD_DIR, SESSION_SECRET disuplai dari credential/env server, bukan dari repo
-                sh '''
-                    docker rm -f ${APP_NAME} || true
-                    docker run -d --name ${APP_NAME} --restart unless-stopped \
-                        -p 8080:8080 --env-file /opt/${APP_NAME}/.env \
-                        -v /opt/${APP_NAME}/uploads:/app/uploads \
-                        ${IMAGE}:${TAG}
-                '''
+                // Deploy ke domain s1if.cloud dilakukan oleh Delcom (clone dari GitHub lalu build Dockerfile).
+                // Stage ini menandai bahwa seluruh tahap CI (test, coverage, scan, package, image) lulus.
+                echo "CI lulus untuk ${APP_NAME} build #${env.BUILD_NUMBER}. Deploy ke Delcom: Aksi -> Redeploy."
             }
         }
     }
